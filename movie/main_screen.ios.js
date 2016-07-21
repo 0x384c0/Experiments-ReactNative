@@ -1,34 +1,54 @@
 var React = require('react');
 var ReactNative = require('react-native');
+
 var {
   AppRegistry,
   StyleSheet,
   NavigatorIOS,
-} = ReactNative;
+  Text,
+  TouchableHighlight,
+  View 
+} = ReactNative
+var {
+  Component,
+  PropTypes
+} = React
 
 
 
 
 var SearchScreen = require('./SearchScreen');
 
-
-var ReactNativeExperiments = React.createClass({
-  render: function() {
-    return (
-      <NavigatorIOS
-        style = {styles.container}
-        initialRoute = {{
-          title: 'Movies',
-          component: SearchScreen,
-        }}
-      />
-    );
+class MovieMainScreen extends Component {
+   static propTypes = {
+    onBack: PropTypes.func.isRequired
   }
-});
+  render() {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'flex-start',
+          alignItems: 'stretch',
+          backgroundColor: "rgba(74,144,226,1)",
+        }}>
+            <NavigatorIOS
+              style = {styles.container}
+              initialRoute = {{
+                title: 'Movies',
+                component: SearchScreen,
+              }}
+            />
+            <TouchableHighlight
+              onPress={this.props.onBack}>
+              <Text>Back</Text>
+            </TouchableHighlight>
+      </View>
+    )
+  }
+}
 
-AppRegistry.registerComponent('ReactNativeExperiments', () => ReactNativeExperiments);
-
-module.exports = ReactNativeExperiments;
+module.exports = MovieMainScreen//sent this component to import MovieMainScreen from './movie/main_screen'
 
 var styles = StyleSheet.create({
   container: {
