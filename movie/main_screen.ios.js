@@ -20,9 +20,9 @@ var {
 var SearchScreen = require('./SearchScreen');
 
 class MovieMainScreen extends Component {
-   static propTypes = {
-    onBack: PropTypes.func.isRequired
-  }
+//    static propTypes = {
+//     onBack: PropTypes.func.isRequired
+//   }
   render() {
     return (
       <View
@@ -39,11 +39,12 @@ class MovieMainScreen extends Component {
                 component: SearchScreen,
               }}
             />
-            <TouchableHighlight
-              onPress={this.props.onBack}>
-              <Text>Back</Text>
-            </TouchableHighlight>
       </View>
+      
+//             <TouchableHighlight
+//               onPress={this.props.onBack}>
+//               <Text>Back</Text>
+//             </TouchableHighlight>
     )
   }
 }
