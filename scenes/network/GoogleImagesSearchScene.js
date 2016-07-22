@@ -3,6 +3,7 @@ import { View, Text, ListView } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 
 import ImageCell from '../../components/cells/ImageCell'
+import SearchBar from '../../components/others/SearchBar'
 
     var
     GOOGLE_API_CX = "013770233867257397766:e7fh4k86up8",
@@ -21,9 +22,15 @@ export default class GoogleImagesSearchScene extends Component {
   
   render() {
     return (
-      <View style={{marginTop: 80}}>
+      <View >
+        <SearchBar
+          onSearchChange={this.onSearchChange}
+          isLoading={false}
+          onFocus={() => this.refs.listview && this.refs.listview.getScrollResponder().scrollTo({ x: 0, y: 0 })}
+        />
         <Text>Images Google</Text>
         <ListView
+          ref="listview"
           dataSource={this.state.dataSource}
           renderRow={(rowData) => <ImageCell text={rowData.title} />}
           enableEmptySections={true}
@@ -35,6 +42,11 @@ export default class GoogleImagesSearchScene extends Component {
   componentDidMount(){
     console.log("componentDidMount")
     this.searchImages('Google')
+  }
+  
+  onSearchChange(event: Object){
+    var filter = event.nativeEvent.text.toLowerCase()
+    console.log("onSearchChange - " + filter)
   }
   
    searchImages(query: String){
