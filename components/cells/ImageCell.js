@@ -1,4 +1,4 @@
-import React, { Component, } from 'react'
+import React, { Component,PropTypes } from 'react'
 import {
   View,
   Text,
@@ -7,7 +7,7 @@ import {
 class ImageCell extends Component {
 
   static propTypes = {
-    text: React.PropTypes.string.isRequired
+    item: PropTypes.object.isRequired
   }
 
   static defaultProps = {}
@@ -27,7 +27,7 @@ class ImageCell extends Component {
             fontWeight: 'normal',
             fontFamily: 'Helvetica Neue',
           }}>
-          The - {this.props.text}
+          title - {this.props.item.title}
         </Text>
       </View>
     )
