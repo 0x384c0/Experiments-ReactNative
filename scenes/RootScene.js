@@ -7,6 +7,7 @@ export default class RootScene extends Component {
     return (
       <View style={{margin: 128}}>
         <Text onPress={Actions.movieScene}>Movies</Text>
+        <Text onPress={Actions.GoogleImagesSearchScene}>Images Google</Text>
       </View>
     )
   }
