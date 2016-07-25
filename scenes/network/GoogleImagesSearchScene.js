@@ -1,6 +1,6 @@
 import Rx from 'rx'
 import React, { Component } from 'react'
-import { View, Text, ListView} from 'react-native'
+import { View, Text, ListView, StyleSheet} from 'react-native'
 import { Actions } from 'react-native-router-flux'
 
 import ImageCell from '../../components/cells/ImageCell'
@@ -31,7 +31,7 @@ export default class GoogleImagesSearchScene extends Component {
     this.subscription.dispose()
   }
 
-// Initialize the hardcoded data
+// Initializeta
   constructor(props) {
     super(props)
     this.initState()
@@ -53,10 +53,10 @@ export default class GoogleImagesSearchScene extends Component {
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})//boilerplate
     this.state = { dataSource: ds.cloneWithRows([])}//boilerplate
   }
-
+//lifecycle
   render() {
     return (
-      <View >
+      <View style={styles.container}>
         <SearchBar
           onSearchChange={this.onSearchChange}
           isLoading={false}
@@ -66,8 +66,12 @@ export default class GoogleImagesSearchScene extends Component {
         <ListView
           ref="listview"
           dataSource={this.state.dataSource}
+          renderSeparator={this.renderSeparator}
           renderRow={(item) => <ImageCell item={item} />}
           enableEmptySections={true}
+          automaticallyAdjustContentInsets={false}
+          keyboardDismissMode="on-drag"
+          keyboardShouldPersistTaps={true}
         />
       </View>
     )
@@ -76,14 +80,28 @@ export default class GoogleImagesSearchScene extends Component {
     console.log("componentDidMount")
     //this.searchImages('Google')
   }
+//render
+  renderSeparator(
+    sectionID: number | string,
+    rowID: number | string,
+    adjacentRowHighlighted: boolean
+  ) {
+    var style = styles.rowSeparator;
+    if (adjacentRowHighlighted) {
+        style = [style, styles.rowSeparatorHide];
+    }
+    return (
+      <View key={'SEP_' + sectionID + '_' + rowID}  style={style}/>
+    );
+  }
 
+//others
   onSearchChange(event: Object){
     var filter = event.nativeEvent.text.toLowerCase()
     console.log("onSearchChange - " + filter)
     console.log(this.testVar)
     tabeData.onNext(filter)
   }
-
   searchImages(query: String){
      console.log("searchImages - " + query)
 
@@ -116,7 +134,6 @@ export default class GoogleImagesSearchScene extends Component {
     var dataSource = this.state.dataSource.cloneWithRows(images)//boilerplate
     this.setState({ dataSource: dataSource})
   }
-
   getFakeImagesList(){
 
     var Image = (title) => {
@@ -124,7 +141,7 @@ export default class GoogleImagesSearchScene extends Component {
     }
 
     var images = []
-    for (var i = 0; i < 10; i++) {
+    for (var i = 0; i < 20; i++) {
       var image = new Image("Daily Limit Exceeded")
       image.title = "Daily Limit Exceeded"
       images.push(image)
@@ -133,3 +150,19 @@ export default class GoogleImagesSearchScene extends Component {
   }
 
 }
+
+
+var styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+  },
+  rowSeparator: {
+    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+    height: 1,
+    marginLeft: 4,
+  },
+  rowSeparatorHide: {
+    opacity: 0.0,
+  },
+});
