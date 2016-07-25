@@ -3,67 +3,19 @@
 		{
 			"range": {
 				"from": {
-					"line": 24,
-					"ch": 19
-				},
-				"to": {
-					"line": 24,
-					"ch": 26
-				}
-			},
-			"editWith": "colorPicker",
-			"type": "string",
-			"name": "Color",
-			"group": "TEXT"
-		},
-		{
-			"range": {
-				"from": {
-					"line": 25,
-					"ch": 22
-				},
-				"to": {
-					"line": 25,
-					"ch": 24
-				}
-			},
-			"type": "number",
-			"name": "FontSize",
-			"group": "TEXT"
-		},
-		{
-			"range": {
-				"from": {
-					"line": 26,
-					"ch": 24
-				},
-				"to": {
-					"line": 26,
-					"ch": 32
-				}
-			},
-			"editWith": "dropdown",
-			"dropdownOptions": "FontWeight",
-			"type": "string",
-			"name": "FontWeight",
-			"group": "TEXT"
-		},
-		{
-			"range": {
-				"from": {
 					"line": 27,
 					"ch": 24
 				},
 				"to": {
 					"line": 27,
-					"ch": 40
+					"ch": 33
 				}
 			},
 			"editWith": "dropdown",
-			"dropdownOptions": "FontFamily",
+			"dropdownOptions": "ResizeMode",
 			"type": "string",
-			"name": "FontFamily",
-			"group": "TEXT"
+			"name": "ResizeMode",
+			"group": "IMAGE"
 		}
 	]
 }

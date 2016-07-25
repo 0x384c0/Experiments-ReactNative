@@ -1,6 +1,6 @@
 import Rx from 'rx'
 import React, { Component } from 'react'
-import { View, Text, ListView } from 'react-native'
+import { View, Text, ListView} from 'react-native'
 import { Actions } from 'react-native-router-flux'
 
 import ImageCell from '../../components/cells/ImageCell'
