@@ -13,7 +13,7 @@ import SearchBar from '../../components/others/SearchBar'
 
 var tabeData//find vay to store it in class
 
-export default class GoogleImagesSearchScene extends Component {
+class GoogleImagesSearchScene extends Component {
 
   testRx() {
     this.subject = new Rx.Subject()
@@ -166,3 +166,5 @@ var styles = StyleSheet.create({
     opacity: 0.0,
   },
 });
+
+export default GoogleImagesSearchScene
