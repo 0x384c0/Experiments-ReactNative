@@ -107,12 +107,29 @@ export default class GoogleImagesSearchScene extends Component {
      fetch(url.href)
        .then((response) => { return response.json()})//boilerplate
        .then((json)     => { this.setDataSource(json.items) })
+       .catch((error)   => { this.setDataSource(this.getFakeImagesList()); console.log("error - " + error)})
+       //.catch((error)   => { console.error(error.stack)})
        .done() //boilerplate
   }
 
-  setDataSource(movies: Array<any>) {
-    var dataSource = this.state.dataSource.cloneWithRows(movies)//boilerplate
+  setDataSource(images: Array<any>) {
+    var dataSource = this.state.dataSource.cloneWithRows(images)//boilerplate
     this.setState({ dataSource: dataSource})
+  }
+
+  getFakeImagesList(){
+
+    var Image = (title) => {
+     this.title = title
+    }
+
+    var images = []
+    for (var i = 0; i < 10; i++) {
+      var image = new Image("Daily Limit Exceeded")
+      image.title = "Daily Limit Exceeded"
+      images.push(image)
+    }
+    return images
   }
 
 }

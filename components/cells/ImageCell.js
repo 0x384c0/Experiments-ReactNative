@@ -21,12 +21,12 @@ class ImageCell extends Component {
 
   render() {
     return (
-      <View    
+      <View
         style={styles.row}>
-          <Image 
+          <Image
             style={styles.cellImage}
             resizeMode={"contain"}
-            source={{uri:this.props.item.image.thumbnailLink}}
+            source={{uri: this.getThumbnailLink() }}
           />
             <View style={styles.textContainer}>
               <Text
@@ -37,6 +37,16 @@ class ImageCell extends Component {
       </View>
     )
   }
+
+  getThumbnailLink(){
+    try {
+      return this.props.item.image.thumbnailLink
+    } catch (e) {
+      return "https://bytesizemoments.com/wp-content/uploads/2014/04/placeholder3.png"
+    }
+  }
+
+
 }
 
 var styles = StyleSheet.create({
