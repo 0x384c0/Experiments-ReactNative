@@ -1,12 +1,15 @@
-import Rx                                     from 'rx'
-import React, { Component }                   from 'react'
-import { View, Text, ListView, StyleSheet}    from 'react-native'
-import { Actions }                            from 'react-native-router-flux'
+import Rx from 'rx'
+import React, { Component } from 'react'
+import { View, Text, ListView, StyleSheet} from 'react-native'
+import { Actions } from 'react-native-router-flux'
 
-import ImageCell  from '../../components/cells/ImageCell'
-import SearchBar  from '../../components/others/SearchBar'
-import Image      from '../../models/Image'
-import Constants  from '../../Constants'
+import ImageCell from '../../components/cells/ImageCell'
+import SearchBar from '../../components/others/SearchBar'
+
+    var
+    GOOGLE_API_CX = "013770233867257397766:e7fh4k86up8",
+    GOOGLE_API_KEY = "AIzaSyD-qVniTDTaTWgqkBpbCb38LsLR-Rxj9e4",
+    GOOGLE_API_IMAGES_URL = "https://www.googleapis.com/customsearch/v1"
 
 var tabeData//find vay to store it in class
 
@@ -41,9 +44,9 @@ class GoogleImagesSearchScene extends Component {
     var subscription = tabeData
       .debounce(1000)
       .subscribe(
-      (query) => { this.searchImages(query)},//boilerplate
-      (e)     => { console.error('Error: ' + e) },
-      ()      => { console.log('Completed') }
+      (query) => {this.searchImages(query)},//boilerplate
+      (e) => { console.error('Error: ' + e) },
+      ()    => { console.log('Completed') }
     )
   }
   initState(){
@@ -51,20 +54,15 @@ class GoogleImagesSearchScene extends Component {
     this.state = { dataSource: ds.cloneWithRows([])}//boilerplate
   }
 //lifecycle
-  componentDidMount(){
-    console.log("componentDidMount")
-    //this.searchImages('Google')
-  }
-//render
   render() {
     return (
       <View style={styles.container}>
         <SearchBar
           onSearchChange={this.onSearchChange}
           isLoading={false}
-          placeholder="Search image ..."
           onFocus={() => this.refs.listview && this.refs.listview.getScrollResponder().scrollTo({ x: 0, y: 0 })}
         />
+        <Text>Images Google</Text>
         <ListView
           ref="listview"
           dataSource={this.state.dataSource}
@@ -78,6 +76,11 @@ class GoogleImagesSearchScene extends Component {
       </View>
     )
   }
+  componentDidMount(){
+    console.log("componentDidMount")
+    //this.searchImages('Google')
+  }
+//render
   renderSeparator(
     sectionID: number | string,
     rowID: number | string,
@@ -117,14 +120,14 @@ class GoogleImagesSearchScene extends Component {
      console.log("searchImages - " + query)
 
      var
-       url = new URL(Constants.GOOGLE_API_IMAGES_URL),
+       url = new URL(GOOGLE_API_IMAGES_URL),
         params = {
                   q: query,
                   start: "1",
                   alt:"json",
                   searchType:"image",
-                  cx: Constants.GOOGLE_API_CX,
-                  key: Constants.GOOGLE_API_KEY
+                  cx: GOOGLE_API_CX,
+                  key: GOOGLE_API_KEY
             }
 
      for (var key in params) {//boilerplate
@@ -143,7 +146,6 @@ class GoogleImagesSearchScene extends Component {
 
   imageDidSelected(image: Object,rowID: number | string){
     console.log("onTouch title - " + image.title + "\nrowID - " + rowID)
-    Actions.ImageScene( {image: image} )
   }
 
   setDataSource(images: Array<any>) {
@@ -151,6 +153,11 @@ class GoogleImagesSearchScene extends Component {
     this.setState({ dataSource: dataSource})
   }
   getFakeImagesList(){
+
+    var Image = (title) => {
+     this.title = title
+    }
+
     var images = []
     for (var i = 0; i < 20; i++) {
       var image = new Image("Daily Limit Exceeded")

@@ -4,6 +4,8 @@ import {
   Text,
   Image,
   StyleSheet,
+  TouchableHighlight,
+  TouchableNativeFeedback,
   Platform,
 } from 'react-native'
 
@@ -21,8 +23,16 @@ class ImageCell extends Component {
   }
 
   render() {
+
+    var TouchableElement = TouchableHighlight;
+    if (Platform.OS === 'android') {
+      TouchableElement = TouchableNativeFeedback;
+    }
     return (
-      <View style={styles.container}>
+      <View>
+       <TouchableElement
+        onPress={this.props.onPress}
+       >
           <View
             style={styles.row}>
               <Image
@@ -37,6 +47,7 @@ class ImageCell extends Component {
                   </Text>
                 </View>
           </View>
+        </TouchableElement>
       </View>
     )
   }
@@ -53,11 +64,6 @@ class ImageCell extends Component {
 }
 
 var styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop:70,
-    backgroundColor: 'white',
-  },
   textContainer: {
     flex: 1,
   },
