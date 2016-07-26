@@ -1,15 +1,18 @@
-import React, { Component,PropTypes } from 'react'
+import React, { Component, PropTypes} from 'react'
 import {
   View,
   Text,
   Image,
-  StyleSheet
+  StyleSheet,
+  TouchableHighlight,
+  TouchableNativeFeedback,
+  Platform,
 } from 'react-native'
 
 class ImageCell extends Component {
 
   static propTypes = {
-    item: PropTypes.object.isRequired
+    image: PropTypes.object.isRequired
   }
 
   static defaultProps = {}
@@ -20,27 +23,38 @@ class ImageCell extends Component {
   }
 
   render() {
+
+    var TouchableElement = TouchableHighlight;
+    if (Platform.OS === 'android') {
+      TouchableElement = TouchableNativeFeedback;
+    }
     return (
-      <View
-        style={styles.row}>
-          <Image
-            style={styles.cellImage}
-            resizeMode={"contain"}
-            source={{uri: this.getThumbnailLink() }}
-          />
-            <View style={styles.textContainer}>
-              <Text
-                style={styles.title}>
-                title - {this.props.item.title}
-              </Text>
-            </View>
+      <View>
+       <TouchableElement
+        onPress={this.props.onPress}
+       >
+          <View
+            style={styles.row}>
+              <Image
+                style={styles.cellImage}
+                resizeMode={"contain"}
+                source={{uri: this.getThumbnailLink() }}
+              />
+                <View style={styles.textContainer}>
+                  <Text
+                    style={styles.title}>
+                    title - {this.props.image.title}
+                  </Text>
+                </View>
+          </View>
+        </TouchableElement>
       </View>
     )
   }
 
   getThumbnailLink(){
     try {
-      return this.props.item.image.thumbnailLink
+      return this.props.image.image.thumbnailLink
     } catch (e) {
       return "https://bytesizemoments.com/wp-content/uploads/2014/04/placeholder3.png"
     }

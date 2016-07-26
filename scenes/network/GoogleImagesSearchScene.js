@@ -67,7 +67,7 @@ class GoogleImagesSearchScene extends Component {
           ref="listview"
           dataSource={this.state.dataSource}
           renderSeparator={this.renderSeparator}
-          renderRow={(item) => <ImageCell item={item} />}
+          renderRow={(image,sectionID,rowID,highlightRowFunc) => this.renderRow(image,sectionID,rowID,highlightRowFunc)}//TODO:fix it: if use this.renderRow, this. will be != GoogleImagesSearchScene
           enableEmptySections={true}
           automaticallyAdjustContentInsets={false}
           keyboardDismissMode="on-drag"
@@ -94,6 +94,20 @@ class GoogleImagesSearchScene extends Component {
       <View key={'SEP_' + sectionID + '_' + rowID}  style={style}/>
     );
   }
+  renderRow(
+    image: Object,
+    sectionID: number | string,
+    rowID: number | string,
+    highlightRowFunc: (sectionID: ?number | string, rowID: ?number | string) => void,
+  ) {
+    return (
+      <ImageCell
+        image={image}
+        onPress={() => { this.imageDidSelected(image,rowID)}}
+      />
+    )
+  }
+
 
 //others
   onSearchChange(event: Object){
@@ -128,6 +142,10 @@ class GoogleImagesSearchScene extends Component {
        .catch((error)   => { this.setDataSource(this.getFakeImagesList()); console.log("error - " + error)})
        //.catch((error)   => { console.error(error.stack)})
        .done() //boilerplate
+  }
+
+  imageDidSelected(image: Object,rowID: number | string){
+    console.log("onTouch title - " + image.title + "\nrowID - " + rowID)
   }
 
   setDataSource(images: Array<any>) {
