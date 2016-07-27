@@ -24,7 +24,6 @@
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		48ED915FC2BC42C6B1F46368 /* libAirMaps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1577C07998AC4DB4AB6150ED /* libAirMaps.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
-		A6A408511D38BE6B00BCD63A /* info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A6A408501D38BE6B00BCD63A /* info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -546,7 +545,6 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
-				A6A408511D38BE6B00BCD63A /* info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -651,8 +649,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: 0x384c0@gmail.com (36LV3YFGLD)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: 0x384c0@gmail.com (36LV3YFGLD)";
 				DEAD_CODE_STRIPPING = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -669,7 +667,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.ReactNativeExperiments;
 				PRODUCT_NAME = ReactNativeExperiments;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "1e367efb-eb4e-4d66-a528-b253defe59f5";
 			};
 			name = Debug;
 		};
@@ -677,8 +675,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: 0x384c0@gmail.com (36LV3YFGLD)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: 0x384c0@gmail.com (36LV3YFGLD)";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
@@ -694,7 +692,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.ReactNativeExperiments;
 				PRODUCT_NAME = ReactNativeExperiments;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "1e367efb-eb4e-4d66-a528-b253defe59f5";
 			};
 			name = Release;
 		};

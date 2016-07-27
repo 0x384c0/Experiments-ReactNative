@@ -27,7 +27,7 @@ export default class ReactNativeExperiments extends Component {
               <Scene key="GoogleImagesSearchScene"  component={GoogleImagesSearchScene} title="Images Search"       hideTabBar={true}   />
               <Scene key="ImageScene"               component={ImageScene}              title="Image"               hideTabBar={true}   />
             </Scene>
-            <Scene key="ui_tab"  title="UI" icon={TabIcon} omponent={RootScene}>
+            <Scene key="ui_tab"  title="UI" icon={TabIcon}>
               <Scene key="ui_list"                  component={UIListScene}             title="UI list"             onRight={()=>alert("Right button tap")} rightTitle="Right" />
               <Scene key="MapViewScene"             component={MapViewScene}            title="Map View"            hideTabBar={true}/>
             </Scene>

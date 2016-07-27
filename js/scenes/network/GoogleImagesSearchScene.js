@@ -1,14 +1,19 @@
 import Rx                                     from 'rx'
 import React, { Component }                   from 'react'
-import { View, Text, ListView, StyleSheet}    from 'react-native'
+import {
+  View,
+  Text,
+  ListView,
+  StyleSheet,
+  ActivityIndicator
+ }                                            from 'react-native'
 import { Actions }                            from 'react-native-router-flux'
 
 import ImageCell  from '../../components/cells/ImageCell'
 import SearchBar  from '../../components/others/SearchBar'
 import Image      from '../../models/Image'
 import Constants  from '../../Constants'
-
-var tabeData//find vay to store it in class
+import Query      from '../../utils/Query'
 
 class GoogleImagesSearchScene extends Component {
 
@@ -35,10 +40,8 @@ class GoogleImagesSearchScene extends Component {
     //this.testRx()
     this.bind()
   }
-
   bind(){
-    tabeData = new Rx.Subject()
-    var subscription = tabeData
+    var subscription = this.state.tabeDataBinding
       .debounce(1000)
       .subscribe(
       (query) => { this.searchImages(query)},//boilerplate
@@ -48,27 +51,36 @@ class GoogleImagesSearchScene extends Component {
   }
   initState(){
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})//boilerplate
-    this.state = { dataSource: ds.cloneWithRows([])}//boilerplate
+    this.state = {
+      tabeDataBinding : new Rx.Subject(),
+      dataSource: ds.cloneWithRows([]),
+      isLoading: false,
+      query: '',
+      pageNumber: 1,
+    }//boilerplate
   }
 //lifecycle
   componentDidMount(){
     console.log("componentDidMount")
-    //this.searchImages('Google')
+    this.searchImages('Google')
   }
 //render
   render() {
     return (
       <View style={styles.container}>
         <SearchBar
+          ref="searchBar"
           onSearchChange={this.onSearchChange}
           isLoading={false}
           placeholder="Search image ..."
-          onFocus={() => this.refs.listview && this.refs.listview.getScrollResponder().scrollTo({ x: 0, y: 0 })}
+          onFocus={() => this.refs.listView && this.refs.listView.getScrollResponder().scrollTo({ x: 0, y: 0 })}
         />
         <ListView
-          ref="listview"
+          ref="listView"
           dataSource={this.state.dataSource}
           renderSeparator={this.renderSeparator}
+          onEndReached={this.onEndReached}
+          renderFooter={this.renderFooter}
           renderRow={(image,sectionID,rowID,highlightRowFunc) => this.renderRow(image,sectionID,rowID,highlightRowFunc)}//TODO:fix it: if use this.renderRow, this. will be != GoogleImagesSearchScene
           enableEmptySections={true}
           automaticallyAdjustContentInsets={false}
@@ -100,52 +112,58 @@ class GoogleImagesSearchScene extends Component {
     return (
       <ImageCell
         image={image}
-        onPress={() => { this.imageDidSelected(image,rowID)}}
+        onPress={() => { this.onRowPress(image,rowID)}}
       />
     )
   }
-
-
-//others
+  renderFooter(){
+    if (true) {
+      return <ActivityIndicator style={styles.scrollSpinner} />
+    } else {
+      return <View style={styles.scrollSpinner} />
+    }
+  }
+//UI Actions
   onSearchChange(event: Object){
     var filter = event.nativeEvent.text.toLowerCase()
     console.log("onSearchChange - " + filter)
     console.log(this.testVar)
-    tabeData.onNext(filter)
+    this.state.tabeDataBinding.onNext(filter)
   }
-  searchImages(query: String){
-     console.log("searchImages - " + query)
-
-     var
-       url = new URL(Constants.GOOGLE_API_IMAGES_URL),
-        params = {
-                  q: query,
-                  start: "1",
-                  alt:"json",
-                  searchType:"image",
-                  cx: Constants.GOOGLE_API_CX,
-                  key: Constants.GOOGLE_API_KEY
-            }
-
-     for (var key in params) {//boilerplate
-         var value = params[key];//boilerplate
-         url.searchParams.append(key, value) //boilerplate
-     }//boilerplate
-     console.log("href - " + url.href)
-
-     fetch(url.href)
-       .then((response) => { return response.json()})//boilerplate
-       .then((json)     => { this.setDataSource(json.items) })
-       .catch((error)   => { this.setDataSource(this.getFakeImagesList()); console.log("error - " + error)})
-       //.catch((error)   => { console.error(error.stack)})
-       .done() //boilerplate
-  }
-
-  imageDidSelected(image: Object,rowID: number | string){
+  onRowPress(image: Object,rowID: number | string){
     console.log("onTouch title - " + image.title + "\nrowID - " + rowID)
     Actions.ImageScene( {image: image} )
   }
+  onEndReached(){
 
+  }
+//others TODO: move to viewModel
+  searchImages(query: String){
+
+    this.state.query = query
+
+    var
+    url = Constants.GOOGLE_API_IMAGES_URL,
+    params = {
+      q: query,
+      start:   this.state.pageNumber,
+      alt: "json",
+      searchType: "image",
+      cx: Constants.GOOGLE_API_CX,
+      key: Constants.GOOGLE_API_KEY
+    },
+    href = Query.get(url, params)
+
+    console.log("searchImages query - " + query)
+    console.log("searchImages href -  " + href)
+
+    fetch(href)
+       .then((response) => { console.log("to json");        return response.json()})//boilerplate
+       .then((json)     => { console.log("set data");       this.setDataSource(json.items) })
+       .catch((e)       => { console.log("error - " + e);   this.setDataSource(this.getFakeImagesList())} )
+       //.catch((error)   => { console.error(error.stack)})
+       .done() //boilerplate
+  }
   setDataSource(images: Array<any>) {
     var dataSource = this.state.dataSource.cloneWithRows(images)//boilerplate
     this.setState({ dataSource: dataSource})
@@ -159,7 +177,6 @@ class GoogleImagesSearchScene extends Component {
     }
     return images
   }
-
 }
 
 
@@ -175,6 +192,9 @@ var styles = StyleSheet.create({
   },
   rowSeparatorHide: {
     opacity: 0.0,
+  },
+  scrollSpinner: {
+    marginVertical: 20,
   },
 });
 

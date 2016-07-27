@@ -1,13 +1,27 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 
 export default class UIListScene extends Component {
   render() {
     return (
-      <View style={{margin: 128}}>
-        <Text onPress={Actions.MapViewScene}>Map View</Text>
+      <View style={styles.container}>
+        <Text style={styles.textStyle} onPress={Actions.MapViewScene}>Map View</Text>
       </View>
     )
   }
 }
+
+var styles = StyleSheet.create({
+  container: {
+    paddingTop:70,
+    backgroundColor: 'white',
+  },
+  textStyle: {
+    flex: 1,
+    padding:20,
+    paddingBottom:0,
+    fontSize: 18,
+    fontWeight: '500',
+  },
+})
