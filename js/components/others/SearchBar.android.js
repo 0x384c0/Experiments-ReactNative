@@ -52,7 +52,7 @@ var SearchBar = React.createClass({
           autoCapitalize="none"
           autoCorrect={false}
           autoFocus={true}
-          onChange={this.props.onSearchChange}
+          onChange={(event) => { this.props.onSearchChange(event.nativeEvent.text)}}
           placeholder={this.props.placeholder}
           placeholderTextColor="rgba(255, 255, 255, 0.5)"
           onFocus={this.props.onFocus}

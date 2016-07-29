@@ -32,7 +32,7 @@ var SearchBar = React.createClass({
         <TextInput
           autoCapitalize="none"
           autoCorrect={false}
-          onChange={this.props.onSearchChange}
+          onChange={(event) => { this.props.onSearchChange(event.nativeEvent.text)}}
           placeholder={this.props.placeholder}
           onFocus={this.props.onFocus}
           style={styles.searchBarInput}

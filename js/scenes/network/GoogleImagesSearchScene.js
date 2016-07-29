@@ -5,7 +5,8 @@ import {
   Text,
   ListView,
   StyleSheet,
-  ActivityIndicator
+  ActivityIndicator,
+  RefreshControl
  }                                            from 'react-native'
 import { Actions }                            from 'react-native-router-flux'
 
@@ -72,7 +73,7 @@ class GoogleImagesSearchScene extends Component {
       <View style={styles.container}>
         <SearchBar
           ref="searchBar"
-          onSearchChange={(event) => {this.onSearchChange(event)}}//TODO:fix it: if use this.renderRow, this. will be != GoogleImagesSearchScene
+          onSearchChange={this.onSearchChange.bind(this)}
           isLoading={false}
           placeholder="Search image ..."
           onFocus={() => this.refs.listView && this.refs.listView.getScrollResponder().scrollTo({ x: 0, y: 0 })}
@@ -88,6 +89,12 @@ class GoogleImagesSearchScene extends Component {
           automaticallyAdjustContentInsets={false}
           keyboardDismissMode="on-drag"
           keyboardShouldPersistTaps={true}
+          refreshControl={
+          <RefreshControl
+            refreshing={this.state.isLoading && (this.state.listOfImages || 0) != 0}
+            onRefresh={this.onRefresh.bind(this)}
+          />
+        }
         />
       </View>
     )
@@ -127,10 +134,13 @@ class GoogleImagesSearchScene extends Component {
     }
   }
 //UI Actions
-  onSearchChange(event: Object){
-    var filter = event.nativeEvent.text.toLowerCase()
-    console.log("onSearchChange() filter - " + filter)
-    this.state.tabeDataBinding.onNext(filter)
+  onRefresh(){
+    console.log("refresh");
+    this.onSearchChange(this.state.query)
+  }
+  onSearchChange(text: Object){
+    console.log("onSearchChange() text: " + text)
+    this.state.tabeDataBinding.onNext(text)
   }
   onRowPress(image: Object,rowID: number | string){
     console.log("onTouch() title - " + image.title + " rowID - " + rowID)
@@ -157,7 +167,7 @@ class GoogleImagesSearchScene extends Component {
       listOfImages: [],
       dataSource: this.state.dataSource.cloneWithRows([])
     })
-    this.loadImages(this.state.query, this.state.pageNumber)
+    this.loadImages(this.state.query, currentPageNumber)
   }
   loadMoreImages(){
     var currentPageNumber = this.state.pageNumber + 1
@@ -165,12 +175,12 @@ class GoogleImagesSearchScene extends Component {
       isLoading: true,
       pageNumber: currentPageNumber
     })
-    this.loadImages(this.state.query, this.state.pageNumber)
+    this.loadImages(this.state.query, currentPageNumber)
   }
 
 //private
   loadImages(query: String, page: number){
-    //console.log("loadImages() query - " + query + " page - " + page)
+    console.log("loadImages() query: " + query + " page: " + page + " caller: " + arguments.callee.caller.name)
     var
     url = Constants.GOOGLE_API_IMAGES_URL,
     params = {
@@ -183,7 +193,7 @@ class GoogleImagesSearchScene extends Component {
     },
     href = Query.get(url, params)
 
-    console.log(href);
+    //console.log(href);
     fetch(href)
        .then((response) => { return response.json()})//boilerplate
        .then((json)     => { if (json.items.length != 0) { this.setDataSource(json.items)} })
@@ -214,7 +224,7 @@ class GoogleImagesSearchScene extends Component {
 
 
     var dataSource = this.state.dataSource.cloneWithRows(newListOfImages)
-    console.log("setDataSource() images.length - " + images.length + " listOfImages.length - " + this.state.listOfImages.length + "newListOfImages.length - " + newListOfImages.length)
+    //console.log("setDataSource() images.length - " + images.length + " listOfImages.length - " + this.state.listOfImages.length + "newListOfImages.length - " + newListOfImages.length)
 
     this.setState({
       dataSource: dataSource,
