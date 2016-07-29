@@ -7,6 +7,8 @@ import {
   Platform,
 } from 'react-native'
 
+import Constants  from '../../Constants'
+
 class ImageCell extends Component {
 
   static propTypes = {
@@ -55,7 +57,7 @@ class ImageCell extends Component {
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop:70,
+    paddingTop: Constants.getBarHeigh(),
     backgroundColor: 'white',
   },
   textContainer: {

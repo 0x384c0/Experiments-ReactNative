@@ -32,7 +32,7 @@ var dismissKeyboard = require('dismissKeyboard');
 
 var MovieCell = require('./MovieCell');
 var MovieScreen = require('./MovieScreen');
-var SearchBar = require('SearchBar');
+var SearchBar = require('../../components/others/SearchBar');
 
 /**
  * This is for demo purposes only, and rate limited.
@@ -119,7 +119,7 @@ var SearchScreen = React.createClass({
       queryNumber: this.state.queryNumber + 1,
       isLoadingTail: false,
     });
-    
+
         console.log("QERY - " + this._urlForQueryAndPage(query, 1));
     fetch(this._urlForQueryAndPage(query, 1))
       .then((response) => {
@@ -129,10 +129,10 @@ var SearchScreen = React.createClass({
     })
       .then((responseData) => {
         LOADING[query] = false;
-      
+
         console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         console.log("responseData - " + responseData);
-      
+
         resultsCache.totalForQuery[query] = responseData.total;
         resultsCache.dataForQuery[query] = responseData.movies;
         resultsCache.nextPageNumberForQuery[query] = 2;
@@ -153,7 +153,7 @@ var SearchScreen = React.createClass({
 
         console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         console.log("error - " + error);//err
-      
+
         this.setState({
           dataSource: this.getDataSource([]),
           isLoading: false,

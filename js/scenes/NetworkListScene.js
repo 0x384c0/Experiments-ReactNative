@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { Actions } from 'react-native-router-flux'
 
+import Constants  from '../Constants'
+
 export default class NetworkListScene extends Component {
   render() {
     return (
@@ -14,7 +16,7 @@ export default class NetworkListScene extends Component {
 }
 var styles = StyleSheet.create({
   container: {
-    paddingTop:70,
+    paddingTop:Constants.getBarHeigh(),
     backgroundColor: 'white',
   },
   textStyle: {

@@ -1,6 +1,8 @@
-import React, { Component, } from 'react'
-import { View,Text,StyleSheet } from 'react-native'
-import MapView from 'react-native-maps'
+import React, { Component, }              from 'react'
+import { View,Text,StyleSheet,Platform }  from 'react-native'
+import MapView                            from 'react-native-maps'
+
+import Constants  from '../../Constants'
 
 class MapViewScene extends Component {
 
@@ -34,7 +36,7 @@ class MapViewScene extends Component {
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop:70,
+    paddingTop:Constants.getBarHeigh(), //nav bar height
     backgroundColor: 'white',
   },
 });

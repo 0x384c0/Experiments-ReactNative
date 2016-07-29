@@ -17,7 +17,7 @@ import UIListScene                from './scenes/UIListScene'
 import GoogleImagesSearchScene    from './scenes/network/GoogleImagesSearchScene'
 import ImageScene                 from './scenes/network/ImageScene'
 import MapViewScene               from './scenes/UI/MapViewScene'
-import MovieScene                 from './movie/main_screen'
+import MovieScene                 from './scenes/movie/main_screen'
 
 export default class ReactNativeExperiments extends Component {
   render() {
@@ -44,11 +44,11 @@ export default class ReactNativeExperiments extends Component {
 
 BackAndroid.addEventListener('hardwareBackPress', () => {
         try {
-            Actions.pop();
-            return true;
+            Actions.pop()
+            return true
         }
         catch (err) {
-            return false;
+            return false
         }
     })
 

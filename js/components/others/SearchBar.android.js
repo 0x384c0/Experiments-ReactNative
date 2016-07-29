@@ -28,6 +28,8 @@ var {
   View,
 } = ReactNative;
 
+import Constants  from '../../Constants'
+
 var IS_RIPPLE_EFFECT_SUPPORTED = Platform.Version >= 21;
 
 var SearchBar = React.createClass({
@@ -71,6 +73,7 @@ var SearchBar = React.createClass({
 
 var styles = StyleSheet.create({
   searchBar: {
+    marginTop: Constants.getBarHeigh(),
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#a9a9a9',

@@ -9,6 +9,8 @@ import {
   RefreshControl
  }                                            from 'react-native'
 import { Actions }                            from 'react-native-router-flux'
+//var dismissKeyboard =                         require('react-native-dismiss-keyboard');
+import dismissKeyboard from 'dismissKeyboard'
 
 import ImageCell  from '../../components/cells/ImageCell'
 import SearchBar  from '../../components/others/SearchBar'
@@ -67,6 +69,9 @@ class GoogleImagesSearchScene extends Component {
     console.log("componentDidMount()")
     //this.searchImages('Google')
   }
+  componentWillUnmount(){
+    dismissKeyboard()
+  }
 //render
   render() {
     return (
@@ -91,7 +96,7 @@ class GoogleImagesSearchScene extends Component {
           keyboardShouldPersistTaps={true}
           refreshControl={
           <RefreshControl
-            title="Loading..."
+            //title="Loading..."
             refreshing={this.state.isLoading && (this.state.listOfImages || 0) != 0}
             onRefresh={this.onRefresh.bind(this)}
           />
@@ -181,7 +186,11 @@ class GoogleImagesSearchScene extends Component {
 
 //private
   loadImages(query: String, page: number){
-    console.log("loadImages() query: " + query + " page: " + page + " caller: " + arguments.callee.caller.name)
+    try {
+      console.log("loadImages() query: " + query + " page: " + page + " caller: " + arguments.callee.caller.name)
+    } catch (e) {
+      console.log("loadImages() query: " + query + " page: " + page)
+    }
     var
     url = Constants.GOOGLE_API_IMAGES_URL,
     params = {
