@@ -53,16 +53,18 @@ class GoogleImagesSearchScene extends Component {
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})//boilerplate
     this.state = {
       tabeDataBinding : new Rx.Subject(),
+      listOfImages: new Array(),
       dataSource: ds.cloneWithRows([]),
       isLoading: false,
       query: '',
       pageNumber: 1,
+      hasMoreItems: true
     }//boilerplate
   }
 //lifecycle
   componentDidMount(){
-    console.log("componentDidMount")
-    this.searchImages('Google')
+    console.log("componentDidMount()")
+    //this.searchImages('Google')
   }
 //render
   render() {
@@ -70,7 +72,7 @@ class GoogleImagesSearchScene extends Component {
       <View style={styles.container}>
         <SearchBar
           ref="searchBar"
-          onSearchChange={this.onSearchChange}
+          onSearchChange={(event) => {this.onSearchChange(event)}}//TODO:fix it: if use this.renderRow, this. will be != GoogleImagesSearchScene
           isLoading={false}
           placeholder="Search image ..."
           onFocus={() => this.refs.listView && this.refs.listView.getScrollResponder().scrollTo({ x: 0, y: 0 })}
@@ -79,9 +81,9 @@ class GoogleImagesSearchScene extends Component {
           ref="listView"
           dataSource={this.state.dataSource}
           renderSeparator={this.renderSeparator}
-          onEndReached={this.onEndReached}
-          renderFooter={this.renderFooter}
-          renderRow={(image,sectionID,rowID,highlightRowFunc) => this.renderRow(image,sectionID,rowID,highlightRowFunc)}//TODO:fix it: if use this.renderRow, this. will be != GoogleImagesSearchScene
+          onEndReached={this.onEndReached.bind(this)}
+          renderFooter={this.renderFooter.bind(this)}
+          renderRow={this.renderRow.bind(this)}
           enableEmptySections={true}
           automaticallyAdjustContentInsets={false}
           keyboardDismissMode="on-drag"
@@ -117,7 +119,8 @@ class GoogleImagesSearchScene extends Component {
     )
   }
   renderFooter(){
-    if (true) {
+    //console.log("renderFooter() isLoading - " + this.state.isLoading);
+    if (this.state.isLoading) {
       return <ActivityIndicator style={styles.scrollSpinner} />
     } else {
       return <View style={styles.scrollSpinner} />
@@ -126,27 +129,53 @@ class GoogleImagesSearchScene extends Component {
 //UI Actions
   onSearchChange(event: Object){
     var filter = event.nativeEvent.text.toLowerCase()
-    console.log("onSearchChange - " + filter)
-    console.log(this.testVar)
+    console.log("onSearchChange() filter - " + filter)
     this.state.tabeDataBinding.onNext(filter)
   }
   onRowPress(image: Object,rowID: number | string){
-    console.log("onTouch title - " + image.title + "\nrowID - " + rowID)
+    console.log("onTouch() title - " + image.title + " rowID - " + rowID)
     Actions.ImageScene( {image: image} )
   }
   onEndReached(){
-
+    //console.log("onEndReached() listOfImages.length - " + this.state.listOfImages.length + " query - " + this.state.query + " isLoading - " + this.state.isLoading);
+    if (
+      !this.state.hasMoreItems ||
+      this.state.isLoading ||
+      (this.state.listOfImages.length || 0) == 0
+     ){ return }
+     this.loadMoreImages()
   }
 //others TODO: move to viewModel
+//public
   searchImages(query: String){
+    var currentPageNumber = 1
+    this.setState({
+      isLoading: true,
+      pageNumber: currentPageNumber,
+      query: query,
+      hasMoreItems: true,
+      listOfImages: [],
+      dataSource: this.state.dataSource.cloneWithRows([])
+    })
+    this.loadImages(this.state.query, this.state.pageNumber)
+  }
+  loadMoreImages(){
+    var currentPageNumber = this.state.pageNumber + 1
+    this.setState({
+      isLoading: true,
+      pageNumber: currentPageNumber
+    })
+    this.loadImages(this.state.query, this.state.pageNumber)
+  }
 
-    this.state.query = query
-
+//private
+  loadImages(query: String, page: number){
+    //console.log("loadImages() query - " + query + " page - " + page)
     var
     url = Constants.GOOGLE_API_IMAGES_URL,
     params = {
       q: query,
-      start:   this.state.pageNumber,
+      start: page,
       alt: "json",
       searchType: "image",
       cx: Constants.GOOGLE_API_CX,
@@ -154,28 +183,49 @@ class GoogleImagesSearchScene extends Component {
     },
     href = Query.get(url, params)
 
-    console.log("searchImages query - " + query)
-    console.log("searchImages href -  " + href)
-
+    console.log(href);
     fetch(href)
-       .then((response) => { console.log("to json");        return response.json()})//boilerplate
-       .then((json)     => { console.log("set data");       this.setDataSource(json.items) })
-       .catch((e)       => { console.log("error - " + e);   this.setDataSource(this.getFakeImagesList())} )
+       .then((response) => { return response.json()})//boilerplate
+       .then((json)     => { if (json.items.length != 0) { this.setDataSource(json.items)} })
+       .catch((e)       => { this.onError()} )
        //.catch((error)   => { console.error(error.stack)})
        .done() //boilerplate
-  }
-  setDataSource(images: Array<any>) {
-    var dataSource = this.state.dataSource.cloneWithRows(images)//boilerplate
-    this.setState({ dataSource: dataSource})
+
   }
   getFakeImagesList(){
     var images = []
     for (var i = 0; i < 20; i++) {
       var image = new Image("Daily Limit Exceeded")
-      image.title = "Daily Limit Exceeded"
+      image.title = "query: " + this.state.query + "\npage: " + this.state.pageNumber + "\nitem: " + i
       images.push(image)
     }
     return images
+  }
+//
+  setDataSource(images: Array<any>) {
+
+    var oldListOfImages = this.state.listOfImages
+
+    var newListOfImages = oldListOfImages.length == 0 ? images : oldListOfImages.concat(images)
+
+    // for (var i in oldListOfImages) {
+    //   newListOfImages.push(oldListOfImages[i]);
+    // }
+
+
+    var dataSource = this.state.dataSource.cloneWithRows(newListOfImages)
+    console.log("setDataSource() images.length - " + images.length + " listOfImages.length - " + this.state.listOfImages.length + "newListOfImages.length - " + newListOfImages.length)
+
+    this.setState({
+      dataSource: dataSource,
+      isLoading: false,
+      listOfImages: newListOfImages
+    })
+
+  }
+  onError(){
+    //this.setState({hasMoreItems: false})
+    this.setDataSource(this.getFakeImagesList())
   }
 }
 

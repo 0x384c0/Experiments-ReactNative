@@ -43,7 +43,7 @@ class ImageCell extends Component {
                 <View style={styles.textContainer}>
                   <Text
                     style={styles.title}>
-                    title - {this.props.image.title}
+                    {this.props.image.title}
                   </Text>
                 </View>
           </View>
