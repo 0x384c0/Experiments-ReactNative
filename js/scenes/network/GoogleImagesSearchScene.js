@@ -91,6 +91,7 @@ class GoogleImagesSearchScene extends Component {
           keyboardShouldPersistTaps={true}
           refreshControl={
           <RefreshControl
+            title="Loading..."
             refreshing={this.state.isLoading && (this.state.listOfImages || 0) != 0}
             onRefresh={this.onRefresh.bind(this)}
           />

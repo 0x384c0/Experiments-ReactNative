@@ -4,7 +4,11 @@
 //   AppRegistry
 // } = ReactNative
 import React,       { Component }         from 'react'
-import ReactNative, { AppRegistry, Text } from 'react-native'
+import ReactNative, {
+  AppRegistry,
+  Text,
+  BackAndroid
+}                                         from 'react-native'
 import              { Router, Scene }     from 'react-native-router-flux'
 
 import NetworkListScene           from './scenes/NetworkListScene'
@@ -37,6 +41,17 @@ export default class ReactNativeExperiments extends Component {
     )
   }
 }
+
+BackAndroid.addEventListener('hardwareBackPress', () => {
+        try {
+            Actions.pop();
+            return true;
+        }
+        catch (err) {
+            return false;
+        }
+    })
+
 AppRegistry.registerComponent('ReactNativeExperiments', () => ReactNativeExperiments)
 
 
