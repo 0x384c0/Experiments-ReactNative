@@ -27,6 +27,7 @@ project.xcworkspace
 *.iml
 .idea
 .gradle
+.deco
 local.properties
 
 # node.js
@@ -39,4 +40,3 @@ buck-out/
 \.buckd/
 android/app/libs
 android/keystores/debug.keystore
-.fseventsd/
